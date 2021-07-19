@@ -12,7 +12,7 @@ import javax.persistence.*
 @Entity
 @JsonIgnoreProperties(value = ["time"], allowGetters = true)
 @EntityListeners(AuditingEntityListener::class)
-class Action {
+class Activity {
   @Id
   @GenericGenerator(
     name = "sequenceGenerator",
@@ -47,7 +47,7 @@ class Action {
 
     if (javaClass != ProxyUtils.getUserClass(other)) return false
 
-    other as Action
+    other as Activity
 
     return this.id == other.id
   }

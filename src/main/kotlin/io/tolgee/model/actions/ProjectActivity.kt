@@ -3,11 +3,11 @@ package io.tolgee.model.actions
 import javax.persistence.*
 
 @Entity
-class ProjectAction(
+class ProjectActivity(
   @OneToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "id")
   @MapsId
-  var action: Action = Action()
+  var activity: Activity = Activity()
 ) {
   @Id
   private val id: Long = 0

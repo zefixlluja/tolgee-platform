@@ -2,7 +2,7 @@ package io.tolgee.service.actions
 
 import io.tolgee.model.Project
 import io.tolgee.model.actions.OperationType
-import io.tolgee.model.actions.ProjectAction
+import io.tolgee.model.actions.ProjectActivity
 import io.tolgee.model.actions.ProjectModification
 import io.tolgee.model.enums.actions.ProjectMutableField
 import org.springframework.stereotype.Service
@@ -17,7 +17,7 @@ class ProjectActionsService(
 ) {
   fun onModification(type: OperationType, oldProject: Project, newProject: Project) {
     val action = actionsService.create(type)
-    val projectAction = ProjectAction(action)
+    val projectAction = ProjectActivity(action)
     projectAction.projectName = oldProject.name
     projectAction.projectId = oldProject.id
     val modifications = mutableListOf<ProjectModification>()

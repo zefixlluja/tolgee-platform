@@ -3,14 +3,14 @@ package io.tolgee.model.actions
 import javax.persistence.*
 
 @Entity
-class TranslationAction(){
+class TranslationActivity(){
   @Id
   private val id: Long = 0
 
   @OneToOne
   @JoinColumn(name = "id")
   @MapsId
-  var action: Action = Action()
+  var activity: Activity = Activity()
 
   var keyName: String = ""
   var languageId: Long = 0

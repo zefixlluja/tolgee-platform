@@ -4,4 +4,4 @@ import io.tolgee.model.enums.actions.ProjectMutableField
 import javax.persistence.Entity
 
 @Entity
-class ProjectModification : StandardModificationModel<ProjectAction, ProjectMutableField>()
+class ProjectModification : StandardModificationModel<ProjectActivity, ProjectMutableField>()
