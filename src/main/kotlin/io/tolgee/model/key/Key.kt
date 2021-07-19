@@ -14,7 +14,7 @@ import javax.validation.constraints.Size
 @Entity
 @Table(uniqueConstraints = [UniqueConstraint(columnNames = ["project_id", "name"], name = "key_project_id_name")])
 @Audited
-data class Key(
+class Key(
   @field:NotBlank
   @field:Size(max = 200)
   @Column(length = 2000)

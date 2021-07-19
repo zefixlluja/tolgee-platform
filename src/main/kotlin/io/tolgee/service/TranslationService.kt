@@ -16,6 +16,7 @@ import io.tolgee.model.enums.TranslationState
 import io.tolgee.model.key.Key
 import io.tolgee.model.translation.Translation
 import io.tolgee.model.translation.Translation.Companion.builder
+import io.tolgee.model.translation.TranslationComment_.translation
 import io.tolgee.model.views.KeyWithTranslationsView
 import io.tolgee.model.views.SimpleTranslationView
 import io.tolgee.repository.TranslationRepository
@@ -23,8 +24,6 @@ import io.tolgee.service.dataImport.ImportService
 import io.tolgee.service.query_builders.TranslationsViewBuilder
 import io.tolgee.service.query_builders.TranslationsViewBuilderOld
 import io.tolgee.socketio.TranslationsSocketIoModule
-import org.hibernate.envers.AuditReaderFactory
-import org.hibernate.envers.query.AuditEntity
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -40,6 +39,7 @@ class TranslationService(
   private val translationRepository: TranslationRepository,
   private val entityManager: EntityManager,
   private val importService: ImportService,
+  private val translationCommentService: TranslationCommentService,
   private val translationsSocketIoModule: TranslationsSocketIoModule
 ) {
   @Autowired
@@ -181,8 +181,7 @@ class TranslationService(
       .orElseThrow { NotFoundException(Message.LANGUAGE_NOT_FOUND) }
     translationRepository.findOneByKeyAndLanguage(key, language)
       .ifPresent { entity: Translation ->
-        translationsSocketIoModule.onTranslationsDeleted(listOf(entity))
-        translationRepository.delete(entity)
+        delete(entity)
       }
   }
 
@@ -201,20 +200,15 @@ class TranslationService(
     currentMap[path.name] = translation.text
   }
 
-  private fun getHistory(key: Key, language: Language): MutableList<Any?>? {
-    return AuditReaderFactory.get(entityManager)
-      .createQuery()
-      .forRevisionsOfEntity(Translation::class.java, true)
-      .add(
-        AuditEntity.and(
-          AuditEntity.property("language_id").eq(language.id),
-          AuditEntity.property("key_id").eq(key.id)
-        )
-      ).resultList
+  fun delete(entity: Translation) {
+    translationsSocketIoModule.onTranslationsDeleted(listOf(entity))
+    translationCommentService.deleteByTranslationIdIn(entity)
+    translationRepository.delete(entity)
   }
 
   fun deleteByIdIn(ids: Collection<Long>) {
     importService.onExistingTranslationsRemoved(ids)
+    translationCommentService.deleteByTranslationIdIn(ids)
     translationRepository.deleteByIdIn(ids)
   }
 
@@ -232,6 +226,7 @@ class TranslationService(
 
   fun deleteAllByKeys(ids: Collection<Long>) {
     val translations = translationRepository.getAllByKeyIdIn(ids)
+    translations.map { translationCommentService.deleteAll(it.comments) }
     translationsSocketIoModule.onTranslationsDeleted(translations)
     deleteByIdIn(translations.map { it.id })
   }

@@ -18,10 +18,10 @@ class TranslationComment(
   @Column(columnDefinition = "text")
   var text: String = "",
 
-  var state: TranslationCommentState = TranslationCommentState.RESOLUTION_NOT_NEEDED,
-
   @ManyToOne
-  var translation: Translation
+  var translation: Translation,
+
+  var state: TranslationCommentState = TranslationCommentState.RESOLUTION_NOT_NEEDED,
 ) : StandardAuditModel() {
   @ManyToOne(optional = false)
   lateinit var author: UserAccount

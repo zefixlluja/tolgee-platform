@@ -9,6 +9,8 @@ import io.tolgee.repository.KeyRepository
 import io.tolgee.repository.OrganizationRepository
 import io.tolgee.repository.OrganizationRoleRepository
 import io.tolgee.repository.ProjectRepository
+import io.tolgee.security.AuthenticationFacade
+import io.tolgee.security.AuthenticationProvider
 import io.tolgee.security.InitialPasswordManager
 import io.tolgee.service.*
 import io.tolgee.service.dataImport.ImportService
@@ -70,15 +72,29 @@ abstract class AbstractSpringTest : AbstractTransactionalTest() {
   @Autowired
   protected lateinit var organizationRoleService: OrganizationRoleService
 
-  @Autowired lateinit var organizationRoleRepository: OrganizationRoleRepository
+  @Autowired
+  lateinit var organizationRoleRepository: OrganizationRoleRepository
 
-  @Autowired lateinit var projectRepository: ProjectRepository
+  @Autowired
+  lateinit var projectRepository: ProjectRepository
 
-  @Autowired lateinit var importService: ImportService
+  @Autowired
+  lateinit var importService: ImportService
 
-  @Autowired lateinit var testDataService: TestDataService
+  @Autowired
+  lateinit var testDataService: TestDataService
 
-  @Autowired lateinit var translationCommentService: TranslationCommentService
+  @Autowired
+  lateinit var translationCommentService: TranslationCommentService
+
+  @Autowired
+  lateinit var translationHistoryService: TranslationHistoryService
+
+  @Autowired
+  lateinit var authenticationFacade: AuthenticationFacade
+
+  @Autowired
+  lateinit var authenticationProvider: AuthenticationProvider
 
   @Autowired
   private fun initInitialUser(authenticationProperties: AuthenticationProperties) {

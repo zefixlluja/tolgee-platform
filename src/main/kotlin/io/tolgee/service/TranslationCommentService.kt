@@ -60,12 +60,19 @@ class TranslationCommentService(
   }
 
   fun delete(entity: TranslationComment) {
-    deleteByIds(listOf(entity.id))
+    deleteAll(listOf(entity))
   }
 
-  @Transactional
-  fun deleteByIds(ids: List<Long>) {
-    return translationCommentRepository.deleteAllByIdIn(ids)
+  fun deleteByTranslationIdIn(ids: Iterable<Long>){
+    translationCommentRepository.deleteByTranslationIdIn(ids);
+  }
+
+  fun deleteByTranslationIdIn(translation: Translation){
+    translationCommentRepository.deleteByTranslation(translation);
+  }
+
+  fun deleteAll(entities: Iterable<TranslationComment>) {
+    translationCommentRepository.deleteAll(entities)
   }
 
   fun create(entity: TranslationComment): TranslationComment {

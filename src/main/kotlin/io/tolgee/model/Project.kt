@@ -1,7 +1,13 @@
 package io.tolgee.model
 
+import io.tolgee.model.actions.OperationType
 import io.tolgee.model.key.Key
+import io.tolgee.service.actions.ProjectActionsService
+import org.apache.commons.lang3.SerializationUtils
 import org.hibernate.envers.Audited
+import org.springframework.beans.factory.ObjectFactory
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Configurable
 import java.util.*
 import javax.persistence.*
 import javax.validation.constraints.NotBlank
@@ -49,13 +55,21 @@ data class Project(
   @ManyToOne(optional = true)
   var organizationOwner: Organization? = null
 
-  @OneToOne(fetch = FetchType.LAZY)
+  @OneToOne(fetch = FetchType.EAGER)
   var baseLanguage: Language? = null
+
+  @Transient
+  private lateinit var savedState: Project
+
+  @PostLoad
+  private fun saveState() {
+    savedState = SerializationUtils.clone(this)
+  }
 
   constructor(name: String, description: String? = null, slug: String?, userOwner: UserAccount?) :
     this(id = 0L, name, description, slug) {
-      this.userOwner = userOwner
-    }
+    this.userOwner = userOwner
+  }
 
   constructor(
     name: String,
@@ -65,22 +79,32 @@ data class Project(
     userOwner: UserAccount? = null
   ) :
     this(id = 0L, name, description, slug) {
-      this.organizationOwner = organizationOwner
-      this.userOwner = userOwner
-    }
+    this.organizationOwner = organizationOwner
+    this.userOwner = userOwner
+  }
 
   fun getLanguage(tag: String): Optional<Language> {
     return languages.stream().filter { l: Language -> (l.tag == tag) }.findFirst()
   }
 
   companion object {
+
+    @Configurable
     class ProjectListener {
+      @Autowired
+      lateinit var provider: ObjectFactory<ProjectActionsService>
+
       @PrePersist
-      @PreUpdate
       fun preSave(project: Project) {
         if (!(project.organizationOwner == null).xor(project.userOwner == null)) {
           throw Exception("Exactly one of organizationOwner or userOwner must be set!")
         }
+      }
+
+      @PreUpdate
+      fun preUpdate(project: Project) {
+        preSave(project)
+        provider.`object`.onModification(OperationType.MODIFICATION, project.savedState, project)
       }
     }
   }

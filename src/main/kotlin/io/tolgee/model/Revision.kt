@@ -13,7 +13,6 @@ import javax.persistence.Id
 @Entity
 @RevisionEntity(RevisionListener::class)
 class Revision : Serializable {
-
   @Id
   @GenericGenerator(
     name = "revisionSequenceGenerator",
@@ -24,7 +23,7 @@ class Revision : Serializable {
     generator = "revisionSequenceGenerator"
   )
   @RevisionNumber
-  private val id = 0
+  val id: Long = 0
 
   @RevisionTimestamp
   private val timestamp: Long = 0
