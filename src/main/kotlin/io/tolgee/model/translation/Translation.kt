@@ -4,6 +4,7 @@ import io.tolgee.model.Language
 import io.tolgee.model.StandardAuditModel
 import io.tolgee.model.enums.TranslationState
 import io.tolgee.model.key.Key
+import org.apache.commons.lang3.SerializationUtils
 import org.hibernate.annotations.ColumnDefault
 import org.hibernate.envers.Audited
 import javax.persistence.*
@@ -70,6 +71,14 @@ data class Translation(
     override fun toString(): String {
       return "Translation.TranslationBuilder(id=$id, text=$text, key=$key, language=$language)"
     }
+  }
+
+  @Transient
+  lateinit var oldTranslation: Translation
+
+  @PostLoad
+  private fun saveState() {
+    oldTranslation = SerializationUtils.clone(this)
   }
 
   companion object {

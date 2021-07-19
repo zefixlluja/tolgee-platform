@@ -1,4 +1,4 @@
-package io.tolgee.model.actions
+package io.tolgee.model.activities
 
 import io.tolgee.model.enums.actions.ProjectMutableField
 import javax.persistence.Entity

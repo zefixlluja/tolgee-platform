@@ -1222,34 +1222,37 @@
     <changeSet author="jenik (generated)" id="1624978579675-3">
         <dropForeignKeyConstraint baseTableName="revision" constraintName="FKb7qk3ljn3o8bqwum6a5io3tpe"/>
     </changeSet>
-    <changeSet author="jenik (generated)" id="1626676475645-5">
-        <createSequence incrementBy="100" sequenceName="action_sequence" startValue="1000000000"/>
+    <changeSet author="jenik (generated)" id="1626703154700-5">
+        <createSequence incrementBy="100" sequenceName="activity" startValue="1000000000"/>
     </changeSet>
-    <changeSet author="jenik (generated)" id="1626676475645-6">
-        <createTable tableName="action">
+    <changeSet author="jenik (generated)" id="1626703154700-6">
+        <createSequence incrementBy="100" sequenceName="activity_sequence" startValue="1000000000"/>
+    </changeSet>
+    <changeSet author="jenik (generated)" id="1626703154700-7">
+        <createTable tableName="activity">
             <column name="id" type="BIGINT">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="actionPK"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="activityPK"/>
             </column>
             <column name="time" type="TIMESTAMP WITHOUT TIME ZONE">
                 <constraints nullable="false"/>
             </column>
-            <column name="type" type="INTEGER"/>
             <column name="user_id" type="BIGINT"/>
             <column name="user_name" type="VARCHAR(255)"/>
         </createTable>
     </changeSet>
-    <changeSet author="jenik (generated)" id="1626676475645-7">
-        <createTable tableName="project_action">
+    <changeSet author="jenik (generated)" id="1626703154700-8">
+        <createTable tableName="project_activity">
             <column name="id" type="BIGINT">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="project_actionPK"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="project_activityPK"/>
             </column>
+            <column name="type" type="INTEGER"/>
             <column name="project_id" type="BIGINT">
                 <constraints nullable="false"/>
             </column>
             <column name="project_name" type="VARCHAR(255)"/>
         </createTable>
     </changeSet>
-    <changeSet author="jenik (generated)" id="1626676475645-8">
+    <changeSet author="jenik (generated)" id="1626703154700-9">
         <createTable tableName="project_modification">
             <column name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="project_modificationPK"/>
@@ -1257,24 +1260,29 @@
             <column name="field" type="VARCHAR(255)"/>
             <column name="new_value" type="TEXT"/>
             <column name="old_value" type="TEXT"/>
-            <column name="action_id" type="BIGINT"/>
+            <column name="activity_id" type="BIGINT"/>
         </createTable>
     </changeSet>
-    <changeSet author="jenik (generated)" id="1626676475645-9">
-        <createTable tableName="translation_action">
+    <changeSet author="jenik (generated)" id="1626703154700-10">
+        <createTable tableName="translation_activity">
             <column name="id" type="BIGINT">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="translation_actionPK"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="translation_activityPK"/>
+            </column>
+            <column name="type" type="INTEGER"/>
+            <column name="key_id" type="BIGINT">
+                <constraints nullable="false"/>
             </column>
             <column name="key_name" type="VARCHAR(255)"/>
             <column name="language_id" type="BIGINT">
                 <constraints nullable="false"/>
             </column>
             <column name="language_name" type="VARCHAR(255)"/>
-            <column name="language_tag" type="VARCHAR(255)"/>
-            <column name="translation_text" type="VARCHAR(255)"/>
+            <column name="translation_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
     </changeSet>
-    <changeSet author="jenik (generated)" id="1626676475645-10">
+    <changeSet author="jenik (generated)" id="1626703154700-11">
         <createTable tableName="translation_modification">
             <column name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="translation_modificationPK"/>
@@ -1282,40 +1290,45 @@
             <column name="field" type="VARCHAR(255)"/>
             <column name="new_value" type="TEXT"/>
             <column name="old_value" type="TEXT"/>
-            <column name="action_id" type="BIGINT"/>
+            <column name="activity_id" type="BIGINT"/>
         </createTable>
     </changeSet>
-    <changeSet author="jenik (generated)" id="1626676475645-11">
-        <addForeignKeyConstraint baseColumnNames="action_id" baseTableName="translation_modification" constraintName="FK8w5qwywoeanpcp7pj92wpepsg" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="translation_action" validate="true"/>
+    <changeSet author="jenik (generated)" id="1626703154700-12">
+        <createIndex indexName="Translation Id Index" tableName="translation_activity">
+            <column name="translation_id"/>
+        </createIndex>
     </changeSet>
-    <changeSet author="jenik (generated)" id="1626676475645-12">
-        <addForeignKeyConstraint baseColumnNames="action_id" baseTableName="project_modification" constraintName="FKkdypvfl6quk8r6mwusjfe4xuv" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="project_action" validate="true"/>
+    <changeSet author="jenik (generated)" id="1626703154700-13">
+        <addForeignKeyConstraint baseColumnNames="activity_id" baseTableName="project_modification" constraintName="FK7qfc73s7ne6fk2emvrs0ssamd" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="project_activity" validate="true"/>
     </changeSet>
-    <changeSet author="jenik (generated)" id="1626676475645-13">
-        <addForeignKeyConstraint baseColumnNames="id" baseTableName="project_action" constraintName="FKm9x95h1jlg6m1ww54ybm1yl5q" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="action" validate="true"/>
+    <changeSet author="jenik (generated)" id="1626703154700-14">
+        <addForeignKeyConstraint baseColumnNames="id" baseTableName="project_activity" constraintName="FK8mr749g4vv8ljs5ar6dhrltcn" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="activity" validate="true"/>
     </changeSet>
-    <changeSet author="jenik (generated)" id="1626676475645-14">
-        <addForeignKeyConstraint baseColumnNames="id" baseTableName="translation_action" constraintName="FKtpqadc6d3o1c8nfcrk2xaf2xe" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="action" validate="true"/>
+    <changeSet author="jenik (generated)" id="1626703154700-15">
+        <addForeignKeyConstraint baseColumnNames="activity_id" baseTableName="translation_modification" constraintName="FKcwibst31oc6y6lkebiut9p5xo" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="translation_activity" validate="true"/>
     </changeSet>
-    <changeSet author="jenik (generated)" id="1626676475645-15">
+    <changeSet author="jenik (generated)" id="1626703154700-16">
+        <addForeignKeyConstraint baseColumnNames="id" baseTableName="translation_activity" constraintName="FKjhagybygc5jg8rrtatfsuvpih" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="project_activity" validate="true"/>
+    </changeSet>
+    <changeSet author="jenik (generated)" id="1626703154700-17">
         <dropForeignKeyConstraint baseTableName="translation_comment" constraintName="FKi84l90hnwf1m1wg1hn2ov7ykr"/>
     </changeSet>
-    <changeSet author="jenik (generated)" id="1626676475645-16">
+    <changeSet author="jenik (generated)" id="1626703154700-18">
         <dropColumn columnName="scopes" tableName="api_key"/>
     </changeSet>
-    <changeSet author="jenik (generated)" id="1626676475645-17">
+    <changeSet author="jenik (generated)" id="1626703154700-19">
         <dropColumn columnName="scopes" tableName="api_key_aud"/>
     </changeSet>
-    <changeSet author="jenik (generated)" id="1626676475645-18">
+    <changeSet author="jenik (generated)" id="1626703154700-20">
         <dropColumn columnName="updated_by_id" tableName="translation_comment"/>
     </changeSet>
-    <changeSet author="jenik (generated)" id="1626676475645-19">
+    <changeSet author="jenik (generated)" id="1626703154700-21">
         <dropColumn columnName="updated_by_id" tableName="translation_comment_aud"/>
     </changeSet>
-    <changeSet author="jenik (generated)" id="1626676475645-3">
+    <changeSet author="jenik (generated)" id="1626703154700-3">
         <addNotNullConstraint columnDataType="bigint" columnName="author_id" tableName="translation_comment" validate="true"/>
     </changeSet>
-    <changeSet author="jenik (generated)" id="1626676475645-4">
+    <changeSet author="jenik (generated)" id="1626703154700-4">
         <addNotNullConstraint columnDataType="bigint" columnName="key_id" tableName="translation" validate="true"/>
     </changeSet>
 </databaseChangeLog>

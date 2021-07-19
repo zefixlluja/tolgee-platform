@@ -1,4 +1,4 @@
-package io.tolgee.model.actions
+package io.tolgee.model.activities
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import org.hibernate.annotations.GenericGenerator
@@ -18,7 +18,7 @@ class Activity {
     name = "sequenceGenerator",
     strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
     parameters = [
-      Parameter(name = "sequence_name", value = "action_sequence"),
+      Parameter(name = "sequence_name", value = "activity_sequence"),
       Parameter(name = "optimizer", value = "pooled"),
       Parameter(name = "initial_value", value = "1000000000"),
       Parameter(name = "increment_size", value = "100")
@@ -35,10 +35,11 @@ class Activity {
   @CreatedDate
   var time: Date? = null
 
-  var type: OperationType = OperationType.MODIFICATION
-
   var userId: Long? = null
   var userName: String? = null
+
+  @OneToOne(mappedBy = "activity")
+  var projectActivity: ProjectActivity? = null
 
   override fun equals(other: Any?): Boolean {
     other ?: return false

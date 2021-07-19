@@ -1,8 +1,7 @@
 package io.tolgee.model
 
-import io.tolgee.model.actions.OperationType
 import io.tolgee.model.key.Key
-import io.tolgee.service.actions.ProjectActionsService
+import io.tolgee.service.actions.ProjectActivityService
 import org.apache.commons.lang3.SerializationUtils
 import org.hibernate.envers.Audited
 import org.springframework.beans.factory.ObjectFactory
@@ -88,13 +87,12 @@ data class Project(
   }
 
   companion object {
-
     @Configurable
     class ProjectListener {
       @Autowired
-      lateinit var provider: ObjectFactory<ProjectActionsService>
+      lateinit var provider: ObjectFactory<ProjectActivityService>
 
-      @PrePersist
+
       fun preSave(project: Project) {
         if (!(project.organizationOwner == null).xor(project.userOwner == null)) {
           throw Exception("Exactly one of organizationOwner or userOwner must be set!")
@@ -104,7 +102,18 @@ data class Project(
       @PreUpdate
       fun preUpdate(project: Project) {
         preSave(project)
-        provider.`object`.onModification(OperationType.MODIFICATION, project.savedState, project)
+        provider.`object`.onModification(project.savedState, project)
+      }
+
+      @PrePersist
+      fun prePersist(project: Project) {
+        preSave(project)
+        provider.`object`.onCreation(project)
+      }
+
+      @PreRemove
+      fun preRemove(project: Project) {
+        provider.`object`.onDeletion(project)
       }
     }
   }

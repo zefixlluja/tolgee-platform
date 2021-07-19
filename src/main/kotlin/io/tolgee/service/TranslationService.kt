@@ -15,11 +15,10 @@ import io.tolgee.model.Project
 import io.tolgee.model.enums.TranslationState
 import io.tolgee.model.key.Key
 import io.tolgee.model.translation.Translation
-import io.tolgee.model.translation.Translation.Companion.builder
-import io.tolgee.model.translation.TranslationComment_.translation
 import io.tolgee.model.views.KeyWithTranslationsView
 import io.tolgee.model.views.SimpleTranslationView
 import io.tolgee.repository.TranslationRepository
+import io.tolgee.service.actions.TranslationActivityService
 import io.tolgee.service.dataImport.ImportService
 import io.tolgee.service.query_builders.TranslationsViewBuilder
 import io.tolgee.service.query_builders.TranslationsViewBuilderOld
@@ -40,7 +39,8 @@ class TranslationService(
   private val entityManager: EntityManager,
   private val importService: ImportService,
   private val translationCommentService: TranslationCommentService,
-  private val translationsSocketIoModule: TranslationsSocketIoModule
+  private val translationsSocketIoModule: TranslationsSocketIoModule,
+  private val translationActivityService: TranslationActivityService
 ) {
   @Autowired
   private lateinit var languageService: LanguageService
@@ -96,7 +96,12 @@ class TranslationService(
   }
 
   fun getOrCreate(key: Key, language: Language): Translation {
-    return find(key, language).orElseGet { builder().language(language).key(key).build() }
+    return find(key, language).orElseGet {
+      Translation().apply {
+        this.language = language
+        this.key = key
+      }
+    }
   }
 
   fun find(key: Key, language: Language): Optional<Translation> {
@@ -159,8 +164,10 @@ class TranslationService(
     val wasCreated = translation.id == 0L
     return translationRepository.save(translation).also {
       if (wasCreated) {
+        translationActivityService.onCreation(translation)
         translationsSocketIoModule.onTranslationsCreated(listOf(translation))
       } else {
+        translationActivityService.onModification(translation.oldTranslation, translation)
         translationsSocketIoModule.onTranslationsModified(listOf(translation))
       }
     }
@@ -201,6 +208,7 @@ class TranslationService(
   }
 
   fun delete(entity: Translation) {
+    translationActivityService.onDeletion(entity)
     translationsSocketIoModule.onTranslationsDeleted(listOf(entity))
     translationCommentService.deleteByTranslationIdIn(entity)
     translationRepository.delete(entity)
