@@ -7,6 +7,8 @@ import io.tolgee.model.enums.actions.TranslationMutableField
 import io.tolgee.model.translation.Translation
 import io.tolgee.model.views.TranslationActivityView
 import io.tolgee.repository.activity.ActivityRepository
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import javax.persistence.EntityManager
@@ -19,8 +21,11 @@ class TranslationActivityService(
   private val activityRepository: ActivityRepository
 ) {
 
-  fun getTranslationActivity(keyId: Long, languageId: Long): List<TranslationActivityView> {
-    return activityRepository.getTranslationActivity(keyId, languageId)
+  fun getTranslationActivity(keyId: Long,
+                             languageId: Long,
+                             pageable: Pageable
+  ): Page<TranslationActivityView> {
+    return activityRepository.getTranslationActivity(keyId, languageId, pageable)
   }
 
   fun onModification(oldTranslation: Translation, newTranslation: Translation) {
@@ -56,7 +61,20 @@ class TranslationActivityService(
       activity.assign(translation)
       val projectActivity = projectActivityService.onTransitiveOperation(project)
       activity.projectActivity = projectActivity
+      val modifications = mutableListOf<TranslationModification>()
+      TranslationMutableField.values().forEach { field ->
+        val newValue = field.property.get(translation).toString()
+        val modification = TranslationModification().apply {
+          this.activity = activity
+          this.field = field
+          this.oldValue = null
+          this.newValue = newValue
+        }
+        modifications.add(modification)
+      }
       entityManager.persist(activity)
+      modifications.forEach { entityManager.persist(it) }
+
     }
   }
 
@@ -66,7 +84,19 @@ class TranslationActivityService(
       activity.assign(translation)
       val projectActivity = projectActivityService.onTransitiveOperation(project)
       activity.projectActivity = projectActivity
+      val modifications = mutableListOf<TranslationModification>()
+      TranslationMutableField.values().forEach { field ->
+        val newValue = field.property.get(translation).toString()
+        val modification = TranslationModification().apply {
+          this.activity = activity
+          this.field = field
+          this.oldValue = newValue
+          this.newValue = null
+        }
+        modifications.add(modification)
+      }
       entityManager.persist(activity)
+      modifications.forEach { entityManager.persist(it) }
     }
   }
 

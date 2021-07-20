@@ -56,7 +56,6 @@ class V2TranslationsController(
   private val translationService: TranslationService,
   private val keyService: KeyService,
   private val pagedAssembler: KeysWithTranslationsPagedResourcesAssembler,
-  private val keyTranslationsModelAssembler: KeyWithTranslationsModelAssembler,
   private val translationModelAssembler: TranslationModelAssembler,
   private val languageService: LanguageService
 ) : IController {
