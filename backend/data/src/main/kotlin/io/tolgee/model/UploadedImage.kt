@@ -17,7 +17,7 @@ class UploadedImage(
 
   @ManyToOne(fetch = FetchType.LAZY)
   var userAccount: UserAccount
-) : StandardAuditModel() {
+) : StandardModel() {
 
   val filenameWithExtension
     get() = "$filename.jpg"

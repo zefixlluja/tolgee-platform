@@ -11,7 +11,7 @@ class MtCreditBucket(
 
   @OneToOne
   var organization: Organization? = null
-) : StandardAuditModel() {
+) : StandardModel() {
   var credits: Long = 0
 
   var refilled: Date = Date()

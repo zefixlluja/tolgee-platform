@@ -1,6 +1,6 @@
 package io.tolgee.model.dataImport
 
-import io.tolgee.model.StandardAuditModel
+import io.tolgee.model.StandardModel
 import io.tolgee.model.key.KeyMeta
 import javax.persistence.Column
 import javax.persistence.Entity
@@ -17,7 +17,7 @@ class ImportKey(
   @field:Size(max = 2000)
   @Column(length = 2000)
   var name: String,
-) : StandardAuditModel(), WithKeyMeta {
+) : StandardModel(), WithKeyMeta {
   @ManyToMany(mappedBy = "keys")
   @field:NotEmpty
   var files: MutableList<ImportFile> = mutableListOf()

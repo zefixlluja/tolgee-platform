@@ -1,6 +1,6 @@
 package io.tolgee.model.dataImport
 
-import io.tolgee.model.StandardAuditModel
+import io.tolgee.model.StandardModel
 import io.tolgee.model.dataImport.issues.ImportFileIssue
 import io.tolgee.model.dataImport.issues.ImportFileIssueParam
 import io.tolgee.model.dataImport.issues.issueTypes.FileIssueType
@@ -20,7 +20,7 @@ class ImportFile(
 
   @ManyToOne(optional = false)
   val import: Import,
-) : StandardAuditModel() {
+) : StandardModel() {
   @OneToMany(mappedBy = "file")
   var issues: MutableList<ImportFileIssue> = mutableListOf()
 

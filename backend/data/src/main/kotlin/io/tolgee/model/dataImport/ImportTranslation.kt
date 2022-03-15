@@ -1,7 +1,7 @@
 package io.tolgee.model.dataImport
 
 import com.sun.istack.NotNull
-import io.tolgee.model.StandardAuditModel
+import io.tolgee.model.StandardModel
 import io.tolgee.model.translation.Translation
 import org.apache.commons.codec.digest.MurmurHash3
 import java.nio.ByteBuffer
@@ -18,7 +18,7 @@ class ImportTranslation(
 
   @ManyToOne
   var language: ImportLanguage,
-) : StandardAuditModel() {
+) : StandardModel() {
   @ManyToOne(optional = false)
   lateinit var key: ImportKey
 

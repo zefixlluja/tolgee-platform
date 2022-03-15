@@ -4,7 +4,7 @@ import javax.persistence.Entity
 import javax.persistence.OneToOne
 
 @Entity
-class AutoTranslationConfig : StandardAuditModel() {
+class AutoTranslationConfig : StandardModel() {
   @OneToOne
   lateinit var project: Project
 

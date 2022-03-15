@@ -1,7 +1,7 @@
 package io.tolgee.model.key
 
 import com.sun.istack.NotNull
-import io.tolgee.model.StandardAuditModel
+import io.tolgee.model.StandardModel
 import io.tolgee.model.UserAccount
 import javax.persistence.Column
 import javax.persistence.Entity
@@ -17,7 +17,7 @@ class KeyCodeReference(
   @field:NotNull
   @ManyToOne(optional = false, fetch = FetchType.LAZY)
   var author: UserAccount? = null,
-) : StandardAuditModel(), WithKeyMetaReference {
+) : StandardModel(), WithKeyMetaReference {
   @field:NotBlank
   @Column(length = 300)
   var path: String = ""

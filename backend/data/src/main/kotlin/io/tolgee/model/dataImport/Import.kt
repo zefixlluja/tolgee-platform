@@ -1,7 +1,7 @@
 package io.tolgee.model.dataImport
 
 import io.tolgee.model.Project
-import io.tolgee.model.StandardAuditModel
+import io.tolgee.model.StandardModel
 import io.tolgee.model.UserAccount
 import javax.persistence.Entity
 import javax.persistence.ManyToOne
@@ -20,7 +20,7 @@ class Import(
   @field:NotNull
   @ManyToOne(optional = false)
   val project: Project
-) : StandardAuditModel() {
+) : StandardModel() {
 
   @OneToMany(mappedBy = "import")
   var files = mutableListOf<ImportFile>()

@@ -1,6 +1,6 @@
 package io.tolgee.model.dataImport.issues
 
-import io.tolgee.model.StandardAuditModel
+import io.tolgee.model.StandardModel
 import io.tolgee.model.dataImport.ImportFile
 import io.tolgee.model.dataImport.issues.issueTypes.FileIssueType
 import javax.persistence.Entity
@@ -20,4 +20,4 @@ class ImportFileIssue(
 
   @OneToMany(mappedBy = "issue")
   var params: MutableList<ImportFileIssueParam>? = null,
-) : StandardAuditModel()
+) : StandardModel()

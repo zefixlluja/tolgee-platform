@@ -1,6 +1,6 @@
 package io.tolgee.model.key
 
-import io.tolgee.model.StandardAuditModel
+import io.tolgee.model.StandardModel
 import io.tolgee.model.UserAccount
 import io.tolgee.model.dataImport.ImportKey
 import javax.persistence.Entity
@@ -20,7 +20,7 @@ class KeyMeta(
 
   @OneToOne
   var importKey: ImportKey? = null,
-) : StandardAuditModel() {
+) : StandardModel() {
 
   @OneToMany(mappedBy = "keyMeta")
   @OrderBy("id")

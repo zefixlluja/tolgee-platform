@@ -1,6 +1,5 @@
 package io.tolgee.model
 
-import org.hibernate.envers.Audited
 import javax.persistence.CascadeType
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
@@ -13,13 +12,12 @@ import javax.validation.constraints.NotBlank
 
 @Entity
 @Table(uniqueConstraints = [UniqueConstraint(columnNames = ["code"], name = "invitation_code_unique")])
-@Audited
 data class Invitation(
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   var id: Long? = null,
   var code: @NotBlank String? = null
-) : AuditModel() {
+) : WithCreatedAtAndUpdatedAtFields() {
 
   @OneToOne(mappedBy = "invitation", cascade = [CascadeType.ALL])
   var permission: Permission? = null

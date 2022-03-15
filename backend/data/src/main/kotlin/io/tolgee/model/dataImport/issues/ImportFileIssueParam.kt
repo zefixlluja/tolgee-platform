@@ -1,6 +1,6 @@
 package io.tolgee.model.dataImport.issues
 
-import io.tolgee.model.StandardAuditModel
+import io.tolgee.model.StandardModel
 import io.tolgee.model.dataImport.issues.paramTypes.FileIssueParamType
 import javax.persistence.Entity
 import javax.persistence.Enumerated
@@ -17,4 +17,4 @@ class ImportFileIssueParam(
 
   @field:NotBlank
   val value: String
-) : StandardAuditModel()
+) : StandardModel()

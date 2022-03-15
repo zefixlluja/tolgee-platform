@@ -8,7 +8,7 @@ import javax.persistence.Enumerated
 import javax.persistence.OneToOne
 
 @Entity
-class MtServiceConfig : StandardAuditModel() {
+class MtServiceConfig : StandardModel() {
   @OneToOne
   lateinit var project: Project
 

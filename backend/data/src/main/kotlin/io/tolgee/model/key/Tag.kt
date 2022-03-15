@@ -1,7 +1,7 @@
 package io.tolgee.model.key
 
 import io.tolgee.model.Project
-import io.tolgee.model.StandardAuditModel
+import io.tolgee.model.StandardModel
 import javax.persistence.Entity
 import javax.persistence.ManyToMany
 import javax.persistence.ManyToOne
@@ -9,7 +9,7 @@ import javax.persistence.OrderBy
 import javax.validation.constraints.NotEmpty
 
 @Entity
-class Tag : StandardAuditModel() {
+class Tag : StandardModel() {
   @field:NotEmpty
   var name: String = ""
 

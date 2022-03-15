@@ -1,7 +1,6 @@
 package io.tolgee.model
 
 import io.tolgee.model.enums.ApiScope
-import org.hibernate.envers.Audited
 import javax.persistence.Entity
 import javax.persistence.EnumType
 import javax.persistence.Enumerated
@@ -14,7 +13,6 @@ import javax.persistence.OneToOne
 
 @Suppress("LeakingThis")
 @Entity
-@Audited
 data class Permission(
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,7 +26,7 @@ data class Permission(
 
   @Enumerated(EnumType.STRING)
   var type: ProjectPermissionType = ProjectPermissionType.VIEW
-) : AuditModel() {
+) : WithCreatedAtAndUpdatedAtFields() {
 
   constructor(
     id: Long = 0L,
