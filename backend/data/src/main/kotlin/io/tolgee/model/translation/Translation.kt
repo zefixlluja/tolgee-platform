@@ -6,7 +6,6 @@ import io.tolgee.model.StandardAuditModel
 import io.tolgee.model.enums.TranslationState
 import io.tolgee.model.key.Key
 import org.hibernate.annotations.ColumnDefault
-import org.hibernate.envers.Audited
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.Enumerated
@@ -25,7 +24,6 @@ import javax.validation.constraints.NotNull
     )
   ]
 )
-@Audited
 class Translation(
   @Column(columnDefinition = "text")
   var text: String? = null

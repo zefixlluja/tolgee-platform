@@ -1,7 +1,6 @@
 package io.tolgee.model
 
 import io.tolgee.model.key.Key
-import org.hibernate.envers.Audited
 import java.util.*
 import javax.persistence.CascadeType
 import javax.persistence.Column
@@ -26,7 +25,6 @@ import javax.validation.constraints.Size
 @Entity
 @EntityListeners(Project.Companion.ProjectListener::class)
 @Table(uniqueConstraints = [UniqueConstraint(columnNames = ["address_part"], name = "project_address_part_unique")])
-@Audited
 class Project(
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
