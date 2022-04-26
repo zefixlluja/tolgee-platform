@@ -1625,4 +1625,7 @@
             UPDATE translation_aud set state = 2 where state = 3;
         </sql>
     </changeSet>
+    <changeSet author="jenik (generated)" id="1650963584426-32">
+        <dropColumn columnName="third_party_billing_id" tableName="organization"/>
+    </changeSet>
 </databaseChangeLog>
